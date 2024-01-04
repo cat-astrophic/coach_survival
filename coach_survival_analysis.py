@@ -681,17 +681,21 @@ aft.fit(survh0, 'Duration', 'Event', ancillary = survh0)
 aft.print_summary()
 aft.predict_median(survh0)
 
-"""
-If the hazard ratio for a predictor is close to 1 then that predictor does not affect survival.
-If the hazard ratio is less than 1, then the predictor is protective (i.e., associated with improved survival)
-and if the hazard ratio is greater than 1, then the predictor is associated with increased risk (or decreased survival).
-"""
+# Repeating main analyses with different specifications of the Black variable and Hispanic coaches omitted
 
-"""
-this means that log(HR) ~ 0 is the criterion used here rather than HR ~ 1
-"""
+# Creating a Black variable only setup
 
-"""
-https://sphweb.bumc.bu.edu/otlt/mph-modules/bs/bs704_survival/BS704_Survival6.html
-"""
+survb = survh0[['Event', 'Duration', 'Experience', 'Black', 'Division Wins',
+       'Playoff Appearances', 'Playoff Win Pct', 'Win Pct', 'OSRS', 'DSRS',
+       'FY Win Pct', 'FY Win Pct Change', 'Rooney', 'Black x Rooney']]
+
+# Run the hazard model now with Hispanic coaches dropped
+
+cphb = CoxPHFitter()
+cphb.fit(survb, 'Duration', event_col = 'Event')
+
+# View results
+
+cphb.print_summary(decimals = 3)
+cphb.plot()
 
