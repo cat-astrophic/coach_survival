@@ -11,8 +11,7 @@ from lifelines import WeibullAFTFitter
 
 # Project directory
 
-username = ''
-direc = 'C:/Users/' + username + '/Documents/Data/coach_survival/'
+direc = 'D:/coach_survival/'
 
 # Reading in the data set
 
@@ -56,6 +55,8 @@ fywins = []
 fywpct = []
 fypwpct = []
 fydev = []
+rooney1 = []
+rooney2 = []
 
 for c in list(dx.id.unique()):
     
@@ -91,6 +92,7 @@ for c in list(dx.id.unique()):
     black.append(max(tmp.Black))
     
     m = max(tmp.Year)
+    m2 = min(tmp.Year)
     tmp1 = tmp[tmp.Year == m]
     tmp2 = tmp[tmp.Year >= m-1]
     tmp5 = tmp[tmp.Year >= m-4]
@@ -115,6 +117,8 @@ for c in list(dx.id.unique()):
     fywpct.append(max(tmp1.WinPct))
     fywpct.append(max(tmp1.PlayoffWinPct))
     fydev.append(max(tmp1.WinPct) - sum(tmp.Wins) / (sum(tmp.Wins) + sum(tmp.Losses) + sum(tmp.Ties)))
+    rooney1.append(int(m > 2003))
+    rooney2.append(int(m2 > 2003))
 
 sbsbin = pd.Series([1 if s > 0 else 0 for s in sbs], name = 'Super Bowl Champion')    
 ages = pd.Series(ages, name = 'Age')
@@ -142,17 +146,7 @@ s1 = pd.Series(s1, name = 'SB Past Year')
 s2 = pd.Series(s2, name = 'SB Past 2 Years')
 s5 = pd.Series(s5, name = 'SB Past 5 Years')
 drought = pd.Series(drought, name = 'Playoff Drought')
-fywins = pd.Series(fywins, name = 'FY Wins')
-fywpct = pd.Series(fywpct, name = 'FY Win Pct')
-fypwpct = pd.Series(fywpct, name = 'FY Playoff Win Pct')
-fydev = pd.Series(fydev, name = 'FY Win Pct Change')
-be = pd.Series([black[x]*clen[x] for x in range(len(black))], name = 'Black x Experience')
-
-surv = pd.concat([event, tt, clen, black, divwins, papps, pwpct, wpct, osrs, dsrs, sbsbin, fywpct, fydev, be], axis = 1)
-surv0 = surv[surv['Super Bowl Champion'] == 0].reset_index(drop = True)
-surv0 = surv0.drop(['Super Bowl Champion'], axis = 1)
-
-# Create same data set with hispanic coaches removed
+fywins = pd.Series(fywins, name = 'F# Create same data set with hispanic coaches removed
 
 ages = []
 wins = []
@@ -182,6 +176,8 @@ fywins = []
 fywpct = []
 fypwpct = []
 fydev = []
+rooney1 = []
+rooney2 = []
 
 for c in list(dh.id.unique()):
     
@@ -217,6 +213,7 @@ for c in list(dh.id.unique()):
     black.append(max(tmp.Black))
     
     m = max(tmp.Year)
+    m2 = min(tmp.Year)
     tmp1 = tmp[tmp.Year == m]
     tmp2 = tmp[tmp.Year >= m-1]
     tmp5 = tmp[tmp.Year >= m-4]
@@ -241,6 +238,8 @@ for c in list(dh.id.unique()):
     fywpct.append(max(tmp1.WinPct))
     fywpct.append(max(tmp1.PlayoffWinPct))
     fydev.append(max(tmp1.WinPct) - sum(tmp.Wins) / (sum(tmp.Wins) + sum(tmp.Losses) + sum(tmp.Ties)))
+    rooney1.append(int(m > 2003))
+    rooney2.append(int(m2 > 2003))
 
 sbsbin = pd.Series([1 if s > 0 else 0 for s in sbs], name = 'Super Bowl Champion')    
 ages = pd.Series(ages, name = 'Age')
@@ -273,12 +272,30 @@ fywpct = pd.Series(fywpct, name = 'FY Win Pct')
 fypwpct = pd.Series(fywpct, name = 'FY Playoff Win Pct')
 fydev = pd.Series(fydev, name = 'FY Win Pct Change')
 be = pd.Series([black[x]*clen[x] for x in range(len(black))], name = 'Black x Experience')
+rooney = pd.Series(rooney1, name = 'Rooney')
+rooney2 = pd.Series(rooney2, name = 'Rooney')
+rxb = pd.Series([black[x]*rooney[x] for x in range(len(black))], name = 'Black x Rooney')
+rxb2 = pd.Series([black[x]*rooney2[x] for x in range(len(black))], name = 'Black x Rooney')
 
-survh = pd.concat([event, tt, clen, black, divwins, papps, pwpct, wpct, osrs, dsrs, sbsbin, fywpct, fydev, be], axis = 1)
+survh = pd.concat([event, tt, clen, black, divwins, papps, pwpct, wpct, osrs, dsrs, sbsbin, fywpct, fydev, be, rooney, rxb], axis = 1)
 survh0 = survh[survh['Super Bowl Champion'] == 0].reset_index(drop = True)
 survh0 = survh0.drop(['Super Bowl Champion'], axis = 1)
+Y Wins')
+fywpct = pd.Series(fywpct, name = 'FY Win Pct')
+fypwpct = pd.Series(fywpct, name = 'FY Playoff Win Pct')
+fydev = pd.Series(fydev, name = 'FY Win Pct Change')
+be = pd.Series([black[x]*clen[x] for x in range(len(black))], name = 'Black x Experience')
+rooney = pd.Series(rooney1, name = 'Rooney')
+rooney2 = pd.Series(rooney2, name = 'Rooney')
+rxb = pd.Series([black[x]*rooney[x] for x in range(len(black))], name = 'Black x Rooney')
+rxb2 = pd.Series([black[x]*rooney2[x] for x in range(len(black))], name = 'Black x Rooney')
 
-# Run the hazard models
+surv = pd.concat([event, tt, clen, black, divwins, papps, pwpct, wpct, osrs, dsrs, sbsbin, fywpct, fydev, be, rooney, rxb], axis = 1)
+surv0 = surv[surv['Super Bowl Champion'] == 0].reset_index(drop = True)
+surv0 = surv0.drop(['Super Bowl Champion'], axis = 1)
+
+
+# Run the hazard model
 
 cph = CoxPHFitter()
 cph.fit(surv0, 'Duration', event_col = 'Event')
@@ -288,7 +305,7 @@ cph.fit(surv0, 'Duration', event_col = 'Event')
 cph.print_summary()
 cph.plot()
 
-# Run the hazard models now with Hispanic coaches dropped
+# Run the hazard model now with Hispanic coaches dropped
 
 cphh = CoxPHFitter()
 cphh.fit(survh0, 'Duration', event_col = 'Event')
