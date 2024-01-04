@@ -302,7 +302,7 @@ cph.fit(surv0, 'Duration', event_col = 'Event')
 
 # View results
 
-cph.print_summary()
+cph.print_summary(decimals = 3)
 cph.plot()
 
 # Run the hazard model now with Hispanic coaches dropped
@@ -312,7 +312,7 @@ cphh.fit(survh0, 'Duration', event_col = 'Event')
 
 # View results
 
-cphh.print_summary()
+cphh.print_summary(decimals = 3)
 cphh.plot()
 
 # Creating a results table
@@ -337,9 +337,11 @@ view = surv.groupby('Black').mean()
 view.reset_index(inplace = True)
 plot = cph.predict_survival_function(view).plot()
 
-T = surv0['Duration']
-E = surv0['Event']
-groups = surv0['Black']
+xxx = survh0[survh0.Duration <= 10]
+xx = survh0[survh0.Duration <= 5]
+T = xxx['Duration']
+E = xxx['Event']
+groups = xxx['Black']
 ix = (groups == 1)
 kmf = KaplanMeierFitter()
 kmf.fit(T[~ix], E[~ix], label = 'White')
@@ -347,7 +349,7 @@ ax = kmf.plot_survival_function()
 kmf.fit(T[ix], E[ix], label = 'Black')
 ax = kmf.plot_survival_function(ax = ax)
 
-frog = cphh.fit(survh0, 'Duration', event_col = 'Event')
+frog = cphh.fit(xx, 'Duration', event_col = 'Event')
 frog.plot_partial_effects_on_outcome('Black', values = np.arange(1, 2), cmap = 'coolwarm')
 
 # Running a robustness check using a Weibull model
@@ -356,7 +358,7 @@ surv0x = surv0.drop(['Black x Experience'], axis = 1)
 survh0x = survh0.drop(['Black x Experience'], axis = 1)
 
 aft = WeibullAFTFitter()
-aft.fit(surv0x, 'Duration', 'Event', ancillary = surv0x)
+aft.fit(survh0, 'Duration', 'Event', ancillary = survh0)
 aft.print_summary()
 aft.predict_median(survh0)
 
