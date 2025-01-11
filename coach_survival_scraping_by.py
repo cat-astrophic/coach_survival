@@ -8,8 +8,7 @@ from bs4 import BeautifulSoup as bs
 
 # Directory info
 
-username = ''
-direc = 'C:/Users/' + username + '/Documents/Data/coach_survival/'
+direc = 'D:/coach_survival/'
 
 # url from which individual coach links are obtained
 
