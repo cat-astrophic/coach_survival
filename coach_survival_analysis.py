@@ -11,7 +11,7 @@ from lifelines import WeibullAFTFitter
 
 # Project directory
 
-direc = 'D:/coach_survival/'
+direc = 'D/:coach_survival/'
 
 # Reading in the data set
 
@@ -115,7 +115,7 @@ for c in list(dx.id.unique()):
         
     fywins.append(max(tmp1.Wins))
     fywpct.append(max(tmp1.WinPct))
-    fywpct.append(max(tmp1.PlayoffWinPct))
+    fypwpct.append(max(tmp1.PlayoffWinPct))
     fydev.append(max(tmp1.WinPct) - sum(tmp.Wins) / (sum(tmp.Wins) + sum(tmp.Losses) + sum(tmp.Ties)))
     rooney1.append(int(m > 2003))
     rooney2.append(int(m2 > 2003))
@@ -148,7 +148,7 @@ s5 = pd.Series(s5, name = 'SB Past 5 Years')
 drought = pd.Series(drought, name = 'Playoff Drought')
 fywins = pd.Series(fywins, name = 'FY Wins') # Create same data set with hispanic coaches removed
 fywpct = pd.Series(fywpct, name = 'FY Win Pct')
-fypwpct = pd.Series(fywpct, name = 'FY Playoff Win Pct')
+fypwpct = pd.Series(fypwpct, name = 'FY Playoff Win Pct')
 fydev = pd.Series(fydev, name = 'FY Win Pct Change')
 be = pd.Series([black[x]*clen[x] for x in range(len(black))], name = 'Black x Experience')
 rooney = pd.Series(rooney1, name = 'Rooney')
@@ -156,7 +156,7 @@ rooney2 = pd.Series(rooney2, name = 'Rooney')
 rxb = pd.Series([black[x]*rooney[x] for x in range(len(black))], name = 'Black x Rooney')
 rxb2 = pd.Series([black[x]*rooney2[x] for x in range(len(black))], name = 'Black x Rooney')
 
-surv = pd.concat([event, tt, clen, black, divwins, papps, pwpct, wpct, osrs, dsrs, sbsbin, fywpct, fydev, be, rooney, rxb], axis = 1)
+surv = pd.concat([event, tt, clen, black, divwins, papps, pwpct, wpct, osrs, dsrs, sbsbin, be, rooney, rxb], axis = 1)
 surv0 = surv[surv['Super Bowl Champion'] == 0].reset_index(drop = True)
 surv0 = surv0.drop(['Super Bowl Champion'], axis = 1)
 
@@ -250,7 +250,7 @@ for c in list(dh.id.unique()):
         
     fywins.append(max(tmp1.Wins))
     fywpct.append(max(tmp1.WinPct))
-    fywpct.append(max(tmp1.PlayoffWinPct))
+    fypwpct.append(max(tmp1.PlayoffWinPct))
     fydev.append(max(tmp1.WinPct) - sum(tmp.Wins) / (sum(tmp.Wins) + sum(tmp.Losses) + sum(tmp.Ties)))
     rooney1.append(int(m > 2003))
     rooney2.append(int(m2 > 2003))
@@ -283,7 +283,7 @@ s5 = pd.Series(s5, name = 'SB Past 5 Years')
 drought = pd.Series(drought, name = 'Playoff Drought')
 fywins = pd.Series(fywins, name = 'FY Wins')
 fywpct = pd.Series(fywpct, name = 'FY Win Pct')
-fypwpct = pd.Series(fywpct, name = 'FY Playoff Win Pct')
+fypwpct = pd.Series(fypwpct, name = 'FY Playoff Win Pct')
 fydev = pd.Series(fydev, name = 'FY Win Pct Change')
 be = pd.Series([black[x]*clen[x] for x in range(len(black))], name = 'Black x Experience')
 rooney = pd.Series(rooney1, name = 'Rooney')
@@ -291,14 +291,14 @@ rooney2 = pd.Series(rooney2, name = 'Rooney')
 rxb = pd.Series([black[x]*rooney[x] for x in range(len(black))], name = 'Black x Rooney')
 rxb2 = pd.Series([black[x]*rooney2[x] for x in range(len(black))], name = 'Black x Rooney')
 
-survh = pd.concat([event, tt, clen, black, divwins, papps, pwpct, wpct, osrs, dsrs, sbsbin, fywpct, fydev, be, rooney, rxb], axis = 1)
+survh = pd.concat([event, tt, clen, black, divwins, papps, pwpct, wpct, osrs, dsrs, sbsbin, be, rooney, rxb], axis = 1)
 survh0 = survh[survh['Super Bowl Champion'] == 0].reset_index(drop = True)
 survh0 = survh0.drop(['Super Bowl Champion'], axis = 1)
 
 # Run the hazard model
 
 cph = CoxPHFitter()
-cph.fit(surv0, 'Duration', event_col = 'Event')
+cph.fit(surv, 'Duration', event_col = 'Event')
 
 # View results
 
@@ -308,7 +308,7 @@ cph.plot()
 # Run the hazard model now with Hispanic coaches dropped
 
 cphh = CoxPHFitter()
-cphh.fit(survh0, 'Duration', event_col = 'Event')
+cphh.fit(survh, 'Duration', event_col = 'Event')
 
 # View results
 
@@ -450,7 +450,7 @@ for c in list(dx.id.unique()):
         
     fywins.append(max(tmp1.Wins))
     fywpct.append(max(tmp1.WinPct))
-    fywpct.append(max(tmp1.PlayoffWinPct))
+    fypwpct.append(max(tmp1.PlayoffWinPct))
     fydev.append(max(tmp1.WinPct) - sum(tmp.Wins) / (sum(tmp.Wins) + sum(tmp.Losses) + sum(tmp.Ties)))
     rooney1.append(int(m > 2003))
     rooney2.append(int(m2 > 2003))
@@ -483,7 +483,7 @@ s5 = pd.Series(s5, name = 'SB Past 5 Years')
 drought = pd.Series(drought, name = 'Playoff Drought')
 fywins = pd.Series(fywins, name = 'FY Wins') # Create same data set with hispanic coaches removed
 fywpct = pd.Series(fywpct, name = 'FY Win Pct')
-fypwpct = pd.Series(fywpct, name = 'FY Playoff Win Pct')
+fypwpct = pd.Series(fypwpct, name = 'FY Playoff Win Pct')
 fydev = pd.Series(fydev, name = 'FY Win Pct Change')
 be = pd.Series([black[x]*clen[x] for x in range(len(black))], name = 'Black x Experience')
 rooney = pd.Series(rooney1, name = 'Rooney')
@@ -491,7 +491,7 @@ rooney2 = pd.Series(rooney2, name = 'Rooney')
 rxb = pd.Series([black[x]*rooney[x] for x in range(len(black))], name = 'Black x Rooney')
 rxb2 = pd.Series([black[x]*rooney2[x] for x in range(len(black))], name = 'Black x Rooney')
 
-surv = pd.concat([event, tt, clen, black, divwins, papps, pwpct, wpct, osrs, dsrs, sbsbin, fywpct, fydev, be, rooney, rxb], axis = 1)
+surv = pd.concat([event, tt, clen, black, divwins, papps, pwpct, wpct, osrs, dsrs, sbsbin, be, rooney, rxb], axis = 1)
 surv0 = surv[surv['Super Bowl Champion'] == 0].reset_index(drop = True)
 surv0 = surv0.drop(['Super Bowl Champion'], axis = 1)
 
@@ -585,7 +585,7 @@ for c in list(dh.id.unique()):
         
     fywins.append(max(tmp1.Wins))
     fywpct.append(max(tmp1.WinPct))
-    fywpct.append(max(tmp1.PlayoffWinPct))
+    fypwpct.append(max(tmp1.PlayoffWinPct))
     fydev.append(max(tmp1.WinPct) - sum(tmp.Wins) / (sum(tmp.Wins) + sum(tmp.Losses) + sum(tmp.Ties)))
     rooney1.append(int(m > 2003))
     rooney2.append(int(m2 > 2003))
@@ -626,14 +626,14 @@ rooney2 = pd.Series(rooney2, name = 'Rooney')
 rxb = pd.Series([black[x]*rooney[x] for x in range(len(black))], name = 'Black x Rooney')
 rxb2 = pd.Series([black[x]*rooney2[x] for x in range(len(black))], name = 'Black x Rooney')
 
-survh = pd.concat([event, tt, clen, black, divwins, papps, pwpct, wpct, osrs, dsrs, sbsbin, fywpct, fydev, be, rooney, rxb], axis = 1)
+survh = pd.concat([event, tt, clen, black, divwins, papps, pwpct, wpct, osrs, dsrs, sbsbin, be, rooney, rxb], axis = 1)
 survh0 = survh[survh['Super Bowl Champion'] == 0].reset_index(drop = True)
 survh0 = survh0.drop(['Super Bowl Champion'], axis = 1)
 
 # Run the hazard model
 
 cph = CoxPHFitter()
-cph.fit(surv0, 'Duration', event_col = 'Event')
+cph.fit(surv, 'Duration', event_col = 'Event')
 
 # View results
 
@@ -643,7 +643,7 @@ cph.plot()
 # Run the hazard model now with Hispanic coaches dropped
 
 cphh = CoxPHFitter()
-cphh.fit(survh0, 'Duration', event_col = 'Event')
+cphh.fit(survh, 'Duration', event_col = 'Event')
 
 # View results
 
@@ -698,4 +698,20 @@ cphb.fit(survb, 'Duration', event_col = 'Event')
 
 cphb.print_summary(decimals = 3)
 cphb.plot()
+
+
+
+"""
+If the hazard ratio for a predictor is close to 1 then that predictor does not affect survival.
+If the hazard ratio is less than 1, then the predictor is protective (i.e., associated with improved survival)
+and if the hazard ratio is greater than 1, then the predictor is associated with increased risk (or decreased survival).
+"""
+
+"""
+this means that log(HR) ~ 0 is the criterion used here rather than HR ~ 1
+"""
+
+"""
+https://sphweb.bumc.bu.edu/otlt/mph-modules/bs/bs704_survival/BS704_Survival6.html
+"""
 
